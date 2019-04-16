@@ -16,7 +16,7 @@ class Election(models.Model):
 
 
 
-class ListOfChoicese(models.Model):
+class ListOfChoices(models.Model):
  id = models.AutoField(primary_key=True)
  Choices=models.CharField(max_length=1000)
  foreigkey=models.ForeignKey(Election, on_delete=models.CASCADE)
