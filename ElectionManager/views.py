@@ -60,3 +60,15 @@ class ElectionView(APIView):
                 return Response(data, status=status.HTTP_200_OK)
         except:
             return Response({}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def delete(self, request, format=None):
+        id = request.data.get('id')
+        try:
+            instance = Election.objects.get(id=id)
+        except Election.DoesNotExist:
+            return Response({}, status=status.HTTP_404_NOT_FOUND)
+        try:
+            instance.delete()
+            return Response({}, status=status.HTTP_200_OK)
+        except:
+            return Response({}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
