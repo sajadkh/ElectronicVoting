@@ -7,9 +7,6 @@ from collections import defaultdict
 
 
 class ElectionView(APIView):
-    """
-     get path between two nodes
-    """
 
     def post(self, request, format=None):
         election_data = request.data
@@ -105,3 +102,15 @@ class ElectionView(APIView):
                 else:
                     return Response({}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status=status.HTTP_200_OK)
+
+
+class VoteView(APIView):
+
+    def put(self, request, format=None):
+        try:
+            election_instance = Election.objects.get(id=request.data.get('id'))
+            election_instance.Number_Of_Votes = election_instance.Number_Of_Votes + 1
+            election_instance.save()
+            return Response({}, status=status.HTTP_200_OK)
+        except:
+            return Response({}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
