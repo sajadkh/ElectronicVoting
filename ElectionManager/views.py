@@ -74,25 +74,34 @@ class ElectionView(APIView):
             return Response({}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self, request, format=None):
-        election_serializer = ElectionSerializer(data=request.data)
-        if election_serializer.is_valid():
-            instance = Election.objects.get(id = request.data.get('id'))
-            election_serializer.update(instance,election_serializer.validated_data)
-        else:
+        try:
+            instance = Election.objects.get(id=request.data.get('id'))
+            if request.data.get('Title'):
+                instance.Title = request.data.get('Title')
+            if request.data.get('Start_Time'):
+                instance.Title = request.data.get('Start_Time')
+            if request.data.get('End_Time'):
+                instance.Title = request.data.get('End_Time')
+            if request.data.get('Number_Of_Votes'):
+                instance.Title = request.data.get('Number_Of_Votes')
+            instance.save()
+        except:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
-        list_of_choices = request.data.get('ListOfChoices')
-        id = request.data.get('id')
-        old_list_of_choices = ListOfChoices.objects.all().filter(Election_ref=id)
-        for old_choice in old_list_of_choices:
-            old_choice.delete()
-        for choice in list_of_choices:
-            choice_data = {
-                'Title': choice,
-                'Election_ref': id
-            }
-            list_of_choices_serializer = ListOfChoicesSerializer(data= choice_data)
-            if list_of_choices_serializer.is_valid():
-                list_of_choices_serializer.save()
-            else:
-                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+        if request.data.get('ListOfChoices'):
+            list_of_choices = request.data.get('ListOfChoices')
+            id = request.data.get('id')
+            old_list_of_choices = ListOfChoices.objects.all().filter(Election_ref=id)
+            for old_choice in old_list_of_choices:
+                old_choice.delete()
+            for choice in list_of_choices:
+                choice_data = {
+                    'Title': choice,
+                    'Election_ref': id
+                }
+                list_of_choices_serializer = ListOfChoicesSerializer(data= choice_data)
+                if list_of_choices_serializer.is_valid():
+                    list_of_choices_serializer.save()
+                else:
+                    return Response({}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status=status.HTTP_200_OK)
