@@ -124,3 +124,11 @@ class ChoicesView(APIView):
             out.append(choice.Title)
         return Response(out, status=status.HTTP_200_OK)
 
+class ExistElectionView(APIView):
+
+    def get(self, request, format=None):
+        try:
+            election = Election.objects.get(id= request.query_params.get('id'))
+            return Response({}, status=status.HTTP_200_OK)
+        except Election.DoesNotExist:
+            return Response({}, status=status.HTTP_404_NOT_FOUND)

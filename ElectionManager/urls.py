@@ -5,4 +5,5 @@ urlpatterns = [
     url('election', views.ElectionView.as_view()),
     url('vote', views.VoteView.as_view()),
     url('choices', views.ChoicesView.as_view()),
+    url('existElection', views.ExistElectionView.as_view()),
 ]
