@@ -114,3 +114,13 @@ class VoteView(APIView):
             return Response({}, status=status.HTTP_200_OK)
         except:
             return Response({}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class ChoicesView(APIView):
+
+    def get(self, request, format=None):
+        choices = ListOfChoices.objects.all().filter(Election_ref=request.query_params.get('id'))
+        out = []
+        for choice in choices:
+            out.append(choice.Title)
+        return Response(out, status=status.HTTP_200_OK)
+
